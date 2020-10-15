@@ -58,8 +58,12 @@ export default function ClientComponent() {
         console.log('message',data.message);
               if(person !== data.person){
                 data.message.played = false;
-   setChat((oldChats) => [data.message, ...oldChats]);
+  
+              }else{
+                  data.message.played = true;
               }
+
+               setChat((oldChats) => [data.message, ...oldChats]);
    
     });
 
