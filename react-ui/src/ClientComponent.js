@@ -30,6 +30,8 @@ export default function ClientComponent() {
   const [conectado, setConectado] = useState(false);
   const [qtdCanal, setQtdCanal] = useState(0);
 
+  const [recording, setRecording] = useState(false);
+
   const [audioDetails, setAudioDetails] = useState({
     url: null,
     blob: null,
@@ -119,6 +121,10 @@ export default function ClientComponent() {
   //console.log('audioResposta', audioResposta);
 
   const getUltimosCincoAudios = () => {
+    if(recording){
+      return
+    }
+
     if (chat.length > 0) {
       let arrayAudio = chat.map((audio, i) => {
         if (i > 3) {
@@ -222,6 +228,8 @@ export default function ClientComponent() {
               showUIAudio
               handleAudioUpload={(data) => handleAudioUpload(data)}
               handleRest={() => handleReset()}
+              recording={recording}
+              setRecording={setRecording}
             />
           </div>
           <div id="audio-history">
@@ -234,7 +242,11 @@ export default function ClientComponent() {
                 <UpdateIcon />
               </AccordionSummary>
               <AccordionDetails>
-                <Typography>{getUltimosCincoAudios()}</Typography>
+                <Typography>
+                  
+          
+                  
+                  {getUltimosCincoAudios()}</Typography>
               </AccordionDetails>
             </Accordion>
           </div>

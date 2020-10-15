@@ -12,7 +12,7 @@ class Recorder extends Component {
       time: {},
       seconds: 0,
       isPaused: false,
-      recording: false,
+
       medianotFound: false,
       audios: [],
       audioBlob: null,
@@ -92,7 +92,7 @@ class Recorder extends Component {
   startRecording(e) {
         e.preventDefault();
     console.log(e);
-    if(!this.state.recording){
+    if(!this.props.recording){
       
     
     // wipe old data chunks
@@ -101,7 +101,8 @@ class Recorder extends Component {
     this.mediaRecorder.start(10);
     this.startTimer();
     // say that we're recording
-    this.setState({ recording: true });
+        this.props.setRecording(true);
+
     }
 
 
@@ -116,7 +117,8 @@ class Recorder extends Component {
     // stop the recorder
     this.mediaRecorder.stop();
     // say that we're not recording
-    this.setState({ recording: false });
+    this.props.setRecording(false);
+    //this.setState({ recording: false });
     // save the video to memory
     this.saveAudio();
   }
@@ -126,7 +128,6 @@ class Recorder extends Component {
       time: {},
       seconds: 0,
       isPaused: false,
-      recording: false,
       medianotFound: false,
       audios: [],
       audioBlob: null,
@@ -164,7 +165,7 @@ class Recorder extends Component {
             
           href=" #">
 
-       {!this.state.recording?    <FaMicrophone className="button-record" />:    <FaStop className="button-record" />}
+       {!this.props.recording?    <FaMicrophone className="button-record" />:    <FaStop className="button-record" />}
         
           </a>
         );
@@ -172,7 +173,7 @@ class Recorder extends Component {
         return (
           <a onMouseDown={(e) => this.startRecording(e)} href=" #" onMouseUp={(e) => this.stopRecording(e)} href=" #">
             
-             {!this.state.recording?    <FaMicrophone className="button-record" />:    <FaStop className="button-record" />}
+             {!this.props.recording?    <FaMicrophone className="button-record" />:    <FaStop className="button-record" />}
           </a>
         );
       }
@@ -180,7 +181,7 @@ class Recorder extends Component {
   };
 
   render() {
-    const { recording, audios, time, medianotFound } = this.state;
+    const {  audios, time, medianotFound } = this.state;
     const { showUIAudio, audioURL } = this.props;
     return !medianotFound ? (
       <div className={styles.record_section}>
