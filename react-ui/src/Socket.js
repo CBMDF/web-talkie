@@ -1,6 +1,8 @@
 import io from 'socket.io-client';
 
 let socket;
+export const person = Math.random();
+
 const ENDPOINT = {
   path: '/socket.io',
 
@@ -44,7 +46,7 @@ export const subscribeToReconnect = (cb) => {
 };
 
 export const sendMessage = (room, message) => {
-  if (socket) socket.emit('chat', { message, room });
+  if (socket) socket.emit('chat', { message, room, person });
 };
 
 export const subscribeToQtd = (cb) => {

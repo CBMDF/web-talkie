@@ -20,6 +20,7 @@ import {
   subscribeToQtd,
   subscribeToError,
   subscribeToReconnect,
+  person
 } from './Socket';
 
 export default function ClientComponent() {
@@ -48,16 +49,21 @@ export default function ClientComponent() {
     }
     subscribeToChat((err, data) => {
       if (err) {
-        console.log('aaaa');
+        console.log(err);
         return;
       }
-      //    console.log('data', data);
-      setChat((oldChats) => [data, ...oldChats]);
+         
+        console.log('message',data.message);
+              if(person !== data.person){
+                data.message.played = false;
+   setChat((oldChats) => [data.message, ...oldChats]);
+              }
+   
     });
 
     subscribeToQtd((err, data) => {
       if (err) {
-        console.log('bbb');
+        console.log(err);
         return;
       }
 
@@ -120,8 +126,9 @@ export default function ClientComponent() {
           return;
         }
         let autoPlay = false;
-        if (i === 0) {
+        if (!audio.played) {
           autoPlay = true;
+          chat[i].played = true;
         }
 
         const blob = new Blob(audio.chunks, { type: 'audio/*' });
