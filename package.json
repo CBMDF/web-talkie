@@ -1,0 +1,32 @@
+{
+  "name": "radiocbmdf",
+  "version": "0.0.1",
+  "description": "Radio with socket for CBMDF",
+  "engines": {
+    "node": "14.x"
+  },
+  "scripts": {
+    "start": "node server",
+    "build": "cd react-ui/ && npm install && npm run build"
+  },
+  "cacheDirectories": [
+    "node_modules",
+    "react-ui/node_modules"
+  ],
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://https://github.com/CBMDF/radio"
+  },
+  "keywords": [
+    "node",
+    "heroku",
+    "create-react-app",
+    "react"
+  ],
+  "license": "MIT",
+  "devDependencies": {}
+}
