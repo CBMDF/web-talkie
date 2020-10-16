@@ -1,58 +1,71 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { FaMicrophone } from "react-icons/fa";
 import { FaStop } from "react-icons/fa";
 import styles from "./styles.module.css";
 const audioType = "audio/*";
+let chunks = [];
+let timer = 0;
+let seconds = 0;
 
-class Recorder extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      time: {},
-      seconds: 0,
-      isPaused: false,
+const Recorder = (props) => {
+  const [time, setTime] = useState({});
 
-      medianotFound: false,
-      audios: [],
-      audioBlob: null,
-    };
-    this.timer = 0;
-    this.startTimer = this.startTimer.bind(this);
-    this.countDown = this.countDown.bind(this);
-  }
+  const [medianotFound, setMedianotFound] = useState(false);
+  const [mediaRecorder, setMediaRecorder] = useState(false);
 
-  handleAudioPause(e) {
+  const [audioBlob, setAudioBlob] = useState(null);
+
+  useEffect(() => {
+    async function getMedia() {
+      console.log("getMedia");
+      navigator.getUserMedia =
+        navigator.getUserMedia ||
+        navigator.webkitGetUserMedia ||
+        navigator.mozGetUserMedia ||
+        navigator.msGetUserMedia;
+
+      if (navigator.mediaDevices) {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+        });
+        let mediaRecorder = new MediaRecorder(stream);
+
+        console.log("mediaRecorder", mediaRecorder);
+
+        mediaRecorder.ondataavailable = (e) => {
+          if (e.data && e.data.size > 0) {
+            chunks.push(e.data);
+          }
+        };
+        setMediaRecorder(mediaRecorder);
+      } else {
+        setMedianotFound(true);
+
+        console.log("Media Devices will work only with SSL.....");
+      }
+    }
+    getMedia();
+  }, []);
+
+  const handleAudioStart = (e) => {
     e.preventDefault();
-    clearInterval(this.timer);
-    this.mediaRecorder.pause();
-    this.setState({ pauseRecord: true });
-  }
-  handleAudioStart(e) {
-    e.preventDefault();
-    this.startTimer();
-    this.mediaRecorder.resume();
-    this.setState({ pauseRecord: false });
-  }
+    startTimer();
+    mediaRecorder.resume();
+  };
 
-  startTimer() {
-    //if (this.timer === 0 && this.state.seconds > 0) {
-    this.timer = setInterval(this.countDown, 1000);
-    //}
-  }
+  const startTimer = () => {
+    timer = setInterval(countDown, 1000);
+  };
 
-  countDown() {
+  const countDown = () => {
     // Remove one second, set state so a re-render happens.
-    let seconds = this.state.seconds + 1;
-    this.setState({
-      time: this.secondsToTime(seconds),
-      seconds: seconds,
-    });
+    seconds = seconds + 1;
 
-    this.props.setTime(this.secondsToTime(seconds));
-  }
+    props.setTime(secondsToTime(seconds));
+  };
 
-  secondsToTime(secs) {
+  const secondsToTime = (secs) => {
     let hours = Math.floor(secs / (60 * 60));
 
     let divisor_for_minutes = secs % (60 * 60);
@@ -67,89 +80,76 @@ class Recorder extends Component {
       s: seconds,
     };
     return obj;
-  }
+  };
 
-  async componentDidMount() {
-    console.log(navigator.mediaDevices);
-    navigator.getUserMedia =
-      navigator.getUserMedia ||
-      navigator.webkitGetUserMedia ||
-      navigator.mozGetUserMedia ||
-      navigator.msGetUserMedia;
-    if (navigator.mediaDevices) {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      this.mediaRecorder = new MediaRecorder(stream);
-      this.chunks = [];
-      this.mediaRecorder.ondataavailable = (e) => {
-        if (e.data && e.data.size > 0) {
-          this.chunks.push(e.data);
-        }
-      };
-    } else {
-      this.setState({ medianotFound: true });
-      console.log("Media Decives will work only with SSL.....");
-    }
-  }
-
-  startRecording(e) {
+  const startRecording = (e) => {
+    console.log("novo mediaRecorder", mediaRecorder);
     e.preventDefault();
-    console.log(e);
-    if (!this.props.recording) {
+    //  console.log(e);
+    if (!props.recording) {
       // wipe old data chunks
-      this.chunks = [];
+      chunks = [];
       // start recorder with 10ms buffer
-      this.mediaRecorder.start(10);
-      this.startTimer();
+      mediaRecorder.start(10);
+      startTimer();
       // say that we're recording
-      this.props.setRecording(true);
+      props.setRecording(true);
     }
-  }
+  };
 
-  stopRecording(e) {
-    console.log(e);
+  const stopRecording = (e) => {
+    console.log("stopRecordi");
 
-    clearInterval(this.timer);
-    this.setState({ time: {}, seconds: 0 });
+    clearInterval(timer);
+    setTime({});
+    seconds = 0;
+
     e.preventDefault();
     // stop the recorder
-    this.mediaRecorder.stop();
+    mediaRecorder.stop();
     // say that we're not recording
-    this.props.setRecording(false);
+    props.setRecording(false);
     //this.setState({ recording: false });
     // save the video to memory
-    this.saveAudio();
-  }
+    saveAudio();
+  };
 
-  handleRest() {
+  const handleReset = () => {
     this.setState({
       time: {},
       seconds: 0,
-      isPaused: false,
       medianotFound: false,
-      audios: [],
+
       audioBlob: null,
     });
-    this.props.handleRest(this.state);
-  }
+    props.handleReset(this.state);
+  };
 
-  saveAudio() {
+  const saveAudio = () => {
     // convert saved chunks to blob
-    const blob = new Blob(this.chunks, { type: audioType });
+    const blob = new Blob(chunks, { type: audioType });
     // generate video url from blob
     const audioURL = window.URL.createObjectURL(blob);
     // append videoURL to list of saved videos for rendering
-    const audios = [audioURL];
-    this.setState({ audios, audioBlob: blob });
+    // const audios = [audioURL];
+    // this.setState({ audios, audioBlob: blob });
 
-    this.props.handleAudioUpload({
+    console.log({
       url: audioURL,
       blob: blob,
-      chunks: this.chunks,
-      duration: this.state.time,
+      chunks: chunks,
+      duration: time,
     });
-  }
 
-  getBotaoGravacao() {
+    props.handleAudioUpload({
+      url: audioURL,
+      blob: blob,
+      chunks: chunks,
+      duration: time,
+    });
+  };
+
+  const getBotaoGravacao = () => {
     const mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(
       navigator.userAgent
     );
@@ -157,11 +157,11 @@ class Recorder extends Component {
     if (mobile) {
       return (
         <a
-          onTouchStart={(e) => this.startRecording(e)}
-          onPointerUp={(e) => this.stopRecording(e)}
+          onTouchStart={(e) => startRecording(e)}
+          onPointerUp={(e) => stopRecording(e)}
           href=" #"
         >
-          {!this.props.recording ? (
+          {!props.recording ? (
             <FaMicrophone className="button-record" />
           ) : (
             <FaStop className="button-record" />
@@ -171,11 +171,11 @@ class Recorder extends Component {
     } else {
       return (
         <a
-          onMouseDown={(e) => this.startRecording(e)}
-          onMouseUp={(e) => this.stopRecording(e)}
+          onMouseDown={(e) => startRecording(e)}
+          onMouseUp={(e) => stopRecording(e)}
           href=" #"
         >
-          {!this.props.recording ? (
+          {!props.recording ? (
             <FaMicrophone className="button-record" />
           ) : (
             <FaStop className="button-record" />
@@ -183,37 +183,23 @@ class Recorder extends Component {
         </a>
       );
     }
-  }
+  };
 
-  render() {
-    const { audios, medianotFound } = this.state;
-
-    const { showUIAudio, audioURL } = this.props;
-    return !medianotFound ? (
-      <div className={styles.record_section}>
-        {audioURL !== null && showUIAudio ? (
-          <audio controls>
-            <source src={audios[0]} type="audio/ogg" />
-            <source src={audios[0]} type="audio/mpeg" />
-          </audio>
-        ) : null}
-
-        {this.getBotaoGravacao()}
-      </div>
-    ) : (
-      <p style={{ color: "#fff", marginTop: 30, fontSize: 25 }}>
-        Seems the site is Non-SSL
-      </p>
-    );
-  }
-}
+  return !medianotFound ? (
+    <div className={styles.record_section}>{getBotaoGravacao()}</div>
+  ) : (
+    <p style={{ color: "#fff", marginTop: 30, fontSize: 25 }}>
+      Seems the site is Non-SSL
+    </p>
+  );
+};
 
 Recorder.propTypes = {
   recording: PropTypes.bool.isRequired,
   setRecording: PropTypes.func,
   setTime: PropTypes.func,
   handleAudioUpload: PropTypes.func,
-  handleRest: PropTypes.func,
+  handleReset: PropTypes.func,
   audioURL: PropTypes.string,
   showUIAudio: PropTypes.bool,
 };

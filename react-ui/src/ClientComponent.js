@@ -23,6 +23,7 @@ export default function ClientComponent() {
   const [conectado, setConectado] = useState(false);
   const [qtdCanal, setQtdCanal] = useState(0);
   const [time, setTime] = useState({});
+  const [online, setOnline] = useState(window.navigator.onLine);
 
   const [recording, setRecording] = useState(false);
 
@@ -43,6 +44,9 @@ export default function ClientComponent() {
       initiateSocket(room);
       setConectado(true);
     }
+    window.addEventListener("offline", handleNetworkChange);
+    window.addEventListener("online", handleNetworkChange);
+
     subscribeToChat((err, data) => {
       if (err) {
         console.log(err);
@@ -88,8 +92,14 @@ export default function ClientComponent() {
     return () => {
       disconnectSocket(room);
       setConectado(false);
+      window.removeEventListener("offline", handleNetworkChange);
+      window.removeEventListener("online", handleNetworkChange);
     };
   }, [room]);
+
+  let handleNetworkChange = () => {
+    setOnline(window.navigator.onLine);
+  };
 
   let handleAudioUpload = (file) => {
     console.log(file);
@@ -180,6 +190,7 @@ export default function ClientComponent() {
         <div id="device-case">
           <div id="brand"></div>
           <div id="lcd-display">
+            {online ? "bla" : "blu"}
             <div id="battery">
               Tempo gravação:
               {time.m !== undefined
@@ -238,7 +249,7 @@ export default function ClientComponent() {
               audioURL={audioDetails.url}
               showUIAudio
               handleAudioUpload={(data) => handleAudioUpload(data)}
-              handleRest={() => handleReset()}
+              handleReset={() => handleReset()}
               recording={recording}
               setRecording={setRecording}
               time={time}
