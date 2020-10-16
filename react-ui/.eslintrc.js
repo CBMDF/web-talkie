@@ -6,7 +6,7 @@ module.exports = {
   },
   parserOptions: {
     parser: "babel-eslint",
-    ecmaVersion: 2021,
+    ecmaVersion: 2019,
     sourceType: "module",
   },
   extends: ["plugin:react/recommended", "plugin:prettier/recommended"],
