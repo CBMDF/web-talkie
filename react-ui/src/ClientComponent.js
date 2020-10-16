@@ -1,14 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import ReactAudioPlayer from 'react-audio-player';
-import Recorder from './Recorder';
+import React, { useEffect, useState } from "react";
+import ReactAudioPlayer from "react-audio-player";
+import Recorder from "./Recorder";
 
-import UpdateIcon from '@material-ui/icons/Update';
-
-
-import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
+import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 
 import {
   initiateSocket,
@@ -18,8 +13,8 @@ import {
   subscribeToQtd,
   subscribeToError,
   subscribeToReconnect,
-  person
-} from './Socket';
+  person,
+} from "./Socket";
 
 export default function ClientComponent() {
   const rooms = [1, 2, 3];
@@ -27,7 +22,7 @@ export default function ClientComponent() {
   const [chat, setChat] = useState([]);
   const [conectado, setConectado] = useState(false);
   const [qtdCanal, setQtdCanal] = useState(0);
-  const [time,setTime] = useState({});
+  const [time, setTime] = useState({});
 
   const [recording, setRecording] = useState(false);
 
@@ -53,18 +48,15 @@ export default function ClientComponent() {
         console.log(err);
         return;
       }
-         
 
-              if(person !== data.person){
-                data.message.played = false;
-                
-              }else{
-                  data.message.played = true;
-                  data.message.samePerson = true;
-              }
+      if (person !== data.person) {
+        data.message.played = false;
+      } else {
+        data.message.played = true;
+        data.message.samePerson = true;
+      }
 
-               setChat((oldChats) => [data.message, ...oldChats]);
-   
+      setChat((oldChats) => [data.message, ...oldChats]);
     });
 
     subscribeToQtd((err, data) => {
@@ -82,7 +74,7 @@ export default function ClientComponent() {
         return;
       }
 
-      console.log('data2', data);
+      console.log("data2", data);
       setConectado(false);
     });
 
@@ -125,8 +117,8 @@ export default function ClientComponent() {
   //console.log('audioResposta', audioResposta);
 
   const getUltimosCincoAudios = () => {
-    if(recording){
-      return
+    if (recording) {
+      return;
     }
 
     if (chat.length > 0) {
@@ -141,18 +133,18 @@ export default function ClientComponent() {
           chat[i].played = true;
         }
 
-        const blob = new Blob(audio.chunks, { type: 'audio/*' });
+        const blob = new Blob(audio.chunks, { type: "audio/*" });
         // generate video url from blob
         const audioURL = window.URL.createObjectURL(blob);
 
-        let float = 'left'
+        let float = "left";
 
-        if(chat[i].samePerson){
-          float = 'right'
+        if (chat[i].samePerson) {
+          float = "right";
         }
 
         return (
-          <div style={{float:float}}>
+          <div style={{ float: float }} key={Math.random()}>
             <ReactAudioPlayer
               key={audioURL}
               src={audioURL}
@@ -176,9 +168,9 @@ export default function ClientComponent() {
 
   const getConectado = () => {
     if (conectado) {
-      return 'Conectado';
+      return "Conectado";
     } else {
-      return 'Desconectado';
+      return "Desconectado";
     }
   };
 
@@ -188,11 +180,15 @@ export default function ClientComponent() {
         <div id="device-case">
           <div id="brand"></div>
           <div id="lcd-display">
-            <div id="battery">Tempo gravação: 
-                    {time.m !== undefined ? `${time.m <= 9 ? '0' + time.m : time.m}` : '00'}
-        :
-        {time.s !== undefined ? `${time.s <= 9 ? '0' + time.s : time.s}` : '00'}
-            
+            <div id="battery">
+              Tempo gravação:
+              {time.m !== undefined
+                ? `${time.m <= 9 ? "0" + time.m : time.m}`
+                : "00"}
+              :
+              {time.s !== undefined
+                ? `${time.s <= 9 ? "0" + time.s : time.s}`
+                : "00"}
             </div>
             <div id="status">{getConectado()}</div>
             <div id="users">{qtdCanal} usuário(s)</div>
@@ -208,7 +204,7 @@ export default function ClientComponent() {
                 }}
               >
                 <KeyboardArrowUpIcon
-                  style={{ color: '#c0c0c0', fontSize: '300%' }}
+                  style={{ color: "#c0c0c0", fontSize: "300%" }}
                 />
               </li>
               <li
@@ -219,7 +215,7 @@ export default function ClientComponent() {
                 }}
               >
                 <KeyboardArrowDownIcon
-                  style={{ color: '#c0c0c0', fontSize: '300%' }}
+                  style={{ color: "#c0c0c0", fontSize: "300%" }}
                 />
               </li>
 
@@ -238,7 +234,7 @@ export default function ClientComponent() {
           <div>
             <Recorder
               record={true}
-              title={'CBMDF Recording'}
+              title={"CBMDF Recording"}
               audioURL={audioDetails.url}
               showUIAudio
               handleAudioUpload={(data) => handleAudioUpload(data)}
@@ -249,14 +245,7 @@ export default function ClientComponent() {
               setTime={setTime}
             />
           </div>
-          <div id="audio-history">
-
-
-                  
-          
-                  
-                  {getUltimosCincoAudios()}
-          </div>
+          <div id="audio-history">{getUltimosCincoAudios()}</div>
         </div>
       </div>
     </React.Fragment>

@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-
-import { FaMicrophone } from 'react-icons/fa';
-import { FaStop } from 'react-icons/fa';
-import styles from './styles.module.css';
-const audioType = 'audio/*';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { FaMicrophone } from "react-icons/fa";
+import { FaStop } from "react-icons/fa";
+import styles from "./styles.module.css";
+const audioType = "audio/*";
 
 class Recorder extends Component {
   constructor(props) {
@@ -49,7 +49,7 @@ class Recorder extends Component {
       seconds: seconds,
     });
 
-    this.props.setTime( this.secondsToTime(seconds));
+    this.props.setTime(this.secondsToTime(seconds));
   }
 
   secondsToTime(secs) {
@@ -87,32 +87,27 @@ class Recorder extends Component {
       };
     } else {
       this.setState({ medianotFound: true });
-      console.log('Media Decives will work only with SSL.....');
+      console.log("Media Decives will work only with SSL.....");
     }
   }
 
   startRecording(e) {
-        e.preventDefault();
+    e.preventDefault();
     console.log(e);
-    if(!this.props.recording){
-      
-    
-    // wipe old data chunks
-    this.chunks = [];
-    // start recorder with 10ms buffer
-    this.mediaRecorder.start(10);
-    this.startTimer();
-    // say that we're recording
-        this.props.setRecording(true);
-
+    if (!this.props.recording) {
+      // wipe old data chunks
+      this.chunks = [];
+      // start recorder with 10ms buffer
+      this.mediaRecorder.start(10);
+      this.startTimer();
+      // say that we're recording
+      this.props.setRecording(true);
     }
-
-
   }
 
   stopRecording(e) {
     console.log(e);
-    
+
     clearInterval(this.timer);
     this.setState({ time: {}, seconds: 0 });
     e.preventDefault();
@@ -154,36 +149,45 @@ class Recorder extends Component {
     });
   }
 
-  getBotaoGravacao = () => {
+  getBotaoGravacao() {
     const mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(
       navigator.userAgent
     );
-    
-      if (mobile) {
-    
-        return (
-          <a onTouchStart={(e) => this.startRecording(e)} 
-         onPointerUp={(e) => this.stopRecording(e)} 
-            
-          href=" #">
 
-       {!this.props.recording?    <FaMicrophone className="button-record" />:    <FaStop className="button-record" />}
-        
-          </a>
-        );
-      } else {
-        return (
-          <a onMouseDown={(e) => this.startRecording(e)} href=" #" onMouseUp={(e) => this.stopRecording(e)} href=" #">
-            
-             {!this.props.recording?    <FaMicrophone className="button-record" />:    <FaStop className="button-record" />}
-          </a>
-        );
-      }
-  
-  };
+    if (mobile) {
+      return (
+        <a
+          onTouchStart={(e) => this.startRecording(e)}
+          onPointerUp={(e) => this.stopRecording(e)}
+          href=" #"
+        >
+          {!this.props.recording ? (
+            <FaMicrophone className="button-record" />
+          ) : (
+            <FaStop className="button-record" />
+          )}
+        </a>
+      );
+    } else {
+      return (
+        <a
+          onMouseDown={(e) => this.startRecording(e)}
+          onMouseUp={(e) => this.stopRecording(e)}
+          href=" #"
+        >
+          {!this.props.recording ? (
+            <FaMicrophone className="button-record" />
+          ) : (
+            <FaStop className="button-record" />
+          )}
+        </a>
+      );
+    }
+  }
 
   render() {
-    const {  audios, time, medianotFound } = this.state;
+    const { audios, medianotFound } = this.state;
+
     const { showUIAudio, audioURL } = this.props;
     return !medianotFound ? (
       <div className={styles.record_section}>
@@ -197,11 +201,21 @@ class Recorder extends Component {
         {this.getBotaoGravacao()}
       </div>
     ) : (
-      <p style={{ color: '#fff', marginTop: 30, fontSize: 25 }}>
+      <p style={{ color: "#fff", marginTop: 30, fontSize: 25 }}>
         Seems the site is Non-SSL
       </p>
     );
   }
 }
+
+Recorder.propTypes = {
+  recording: PropTypes.bool.isRequired,
+  setRecording: PropTypes.func,
+  setTime: PropTypes.func,
+  handleAudioUpload: PropTypes.func,
+  handleRest: PropTypes.func,
+  audioURL: PropTypes.string,
+  showUIAudio: PropTypes.bool,
+};
 
 export default Recorder;
