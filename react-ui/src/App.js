@@ -3,11 +3,7 @@ import "./App.css";
 import ClientComponent from "./ClientComponent";
 
 function App() {
-  return (
-    <div className="App">
-      <ClientComponent />
-    </div>
-  );
+  return <ClientComponent />;
 }
 
 export default App;

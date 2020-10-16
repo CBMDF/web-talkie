@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap");
 
 *:focus {
   outline: none;
@@ -10,6 +10,8 @@ a {
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
 }
 body {
+  margin: 0px;
+  overflow: hidden;
   background: #202020;
   font-family: sans-serif;
   -youbkit-touch-callout: none; /* iOS Safari */
@@ -26,7 +28,7 @@ body {
   color: #400e00;
   font-size: 3vh;
   text-align: right;
-  background: no-repeat url('./web-walkie-cbmdf.svg') right;
+  background: no-repeat url("./web-walkie-cbmdf.svg") right;
 }
 
 #wrapper {
@@ -36,7 +38,7 @@ body {
 #device-case {
   display: block;
   padding: 2vw;
-  margin: auto;
+
   background: rgb(255, 229, 121);
   background: linear-gradient(
     180deg,
@@ -51,7 +53,7 @@ body {
 }
 
 #lcd-display {
-  font-family: 'Share Tech Mono', sans-serif;
+  font-family: "Share Tech Mono", sans-serif;
   font-size: 18px;
   background-color: #acb5a8;
   border: solid 20px #202020;
@@ -59,7 +61,7 @@ body {
   width: 80vw;
   padding: 3vw;
   margin: 2vw auto;
-  min-height: 15vh;
+  min-height: 11vh;
   -webkit-box-shadow: inset -10px -10px 10px -10px rgba(66, 25, 25, 0.8);
   -moz-box-shadow: inset -10px -10px 10px -10px rgba(66, 25, 25, 0.8);
   box-shadow: inset -10px -10px 10px -10px rgba(66, 25, 25, 0.8);
