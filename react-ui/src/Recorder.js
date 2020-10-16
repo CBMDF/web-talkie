@@ -48,6 +48,8 @@ class Recorder extends Component {
       time: this.secondsToTime(seconds),
       seconds: seconds,
     });
+
+    this.props.setTime( this.secondsToTime(seconds));
   }
 
   secondsToTime(secs) {
@@ -192,9 +194,6 @@ class Recorder extends Component {
           </audio>
         ) : null}
 
-        {time.m !== undefined ? `${time.m <= 9 ? '0' + time.m : time.m}` : '00'}
-        <span className={styles.divider}>:</span>
-        {time.s !== undefined ? `${time.s <= 9 ? '0' + time.s : time.s}` : '00'}
         {this.getBotaoGravacao()}
       </div>
     ) : (
