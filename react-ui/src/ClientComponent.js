@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import ReactAudioPlayer from "react-audio-player";
 import Recorder from "./Recorder";
+import useSound from "use-sound";
+
+import rogerSound from "./assets/roger.mp3";
 
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
@@ -17,6 +20,7 @@ import {
 } from "./Socket";
 
 export default function ClientComponent() {
+  const [playRoger] = useSound(rogerSound);
   const rooms = [1, 2, 3];
   const [room, setRoom] = useState(rooms[0]);
   const [chat, setChat] = useState([]);
@@ -156,6 +160,7 @@ export default function ClientComponent() {
         return (
           <div style={{ float: float }} key={Math.random()}>
             <ReactAudioPlayer
+              onEnded={playRoger}
               key={audioURL}
               src={audioURL}
               autoPlay={autoPlay}
@@ -189,8 +194,7 @@ export default function ClientComponent() {
       <div id="wrapper" onContextMenu={(e) => e.preventDefault()}>
         <div id="device-case">
           <div id="brand"></div>
-          <div id="lcd-display">
-            {online ? "Online" : "Offline"}
+          <div id="lcd-display" className={online ? "" : "offline"}>
             <div id="battery">
               Tempo gravação:
               {time.m !== undefined

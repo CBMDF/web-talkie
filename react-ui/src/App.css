@@ -67,6 +67,18 @@ body {
   box-shadow: inset -10px -10px 10px -10px rgba(66, 25, 25, 0.8);
 }
 
+#lcd-display.offline {
+  background-color: #ff7c6e;
+}
+
+#lcd-display.speaking {
+  background-color: #b89bbf;
+}
+
+#lcd-display.playing {
+  background-color: #abad7d;
+}
+
 #status {
   display: block;
   float: right;

@@ -2,6 +2,11 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { FaMicrophone } from "react-icons/fa";
 import { FaStop } from "react-icons/fa";
+import useSound from "use-sound";
+
+import startSound from "./assets/start.mp3";
+import endSound from "./assets/end.mp3";
+
 import styles from "./styles.module.css";
 const audioType = "audio/*";
 let chunks = [];
@@ -10,6 +15,8 @@ let seconds = 0;
 
 const Recorder = (props) => {
   const [time, setTime] = useState({});
+  const [playStart] = useSound(startSound);
+  const [playEnd] = useSound(endSound);
 
   const [medianotFound, setMedianotFound] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(false);
@@ -83,6 +90,7 @@ const Recorder = (props) => {
   };
 
   const startRecording = (e) => {
+    playStart();
     console.log("novo mediaRecorder", mediaRecorder);
     e.preventDefault();
     //  console.log(e);
@@ -98,6 +106,7 @@ const Recorder = (props) => {
   };
 
   const stopRecording = (e) => {
+    playEnd();
     console.log("stopRecordi");
 
     clearInterval(timer);
