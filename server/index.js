@@ -54,6 +54,11 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log("Client disconnected");
+    for (let i = 1; i < 100; i++) {
+      socket.leave(i, () => {
+        io.to(i).emit("qtdConectado", io.sockets.adapter.rooms[i]);
+      });
+    }
   });
 });
 

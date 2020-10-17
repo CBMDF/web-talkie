@@ -78,7 +78,7 @@ export default function ClientComponent() {
         return;
       }
 
-      console.log("data2", data);
+      setQtdCanal(0);
       setConectado(false);
     });
 
@@ -88,7 +88,7 @@ export default function ClientComponent() {
       }
 
       setConectado(true);
-    });
+    }, room);
     return () => {
       disconnectSocket(room);
       setConectado(false);
@@ -190,7 +190,7 @@ export default function ClientComponent() {
         <div id="device-case">
           <div id="brand"></div>
           <div id="lcd-display">
-            {online ? "bla" : "blu"}
+            {online ? "Online" : "Offline"}
             <div id="battery">
               Tempo gravação:
               {time.m !== undefined
