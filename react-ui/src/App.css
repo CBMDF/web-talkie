@@ -25,7 +25,7 @@ audio {
   background-color: #eee;
   border-radius: 15px;
   display: block;
-  border: solid 3px #8ac3d1;
+  border: solid 3px #337180;
   padding: 10px;
   height: 23px;
   width: 300px;
@@ -33,7 +33,7 @@ audio {
 }
 
 audio.samePerson {
-  border: solid 3px #d4908a;
+  border: solid 3px #d40000;
 }
 
 audio::before {
