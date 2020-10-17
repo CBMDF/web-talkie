@@ -20,7 +20,7 @@ import {
 } from "./Socket";
 
 export default function ClientComponent() {
-  const [playRoger] = useSound(rogerSound);
+  const [playRoger] = useSound(rogerSound, { volume: 1 });
   const rooms = [1, 2, 3];
   const [room, setRoom] = useState(rooms[0]);
   const [chat, setChat] = useState([]);
@@ -152,9 +152,11 @@ export default function ClientComponent() {
         const audioURL = window.URL.createObjectURL(blob);
 
         let float = "left";
+        let border = "";
 
         if (chat[i].samePerson) {
           float = "right";
+          border = "samePerson";
         }
 
         return (
@@ -164,7 +166,9 @@ export default function ClientComponent() {
               key={audioURL}
               src={audioURL}
               autoPlay={autoPlay}
-              controls
+              controls="false"
+              volume="1.0"
+              className={border}
             />
           </div>
         );
@@ -195,8 +199,11 @@ export default function ClientComponent() {
         <div id="device-case">
           <div id="brand"></div>
           <div id="lcd-display" className={online ? "" : "offline"}>
-            <div id="battery">
-              Tempo gravação:
+            <div id="status">{getConectado()}</div>
+            <div id="users">{qtdCanal} usuário(s)</div>
+            <div id="channel">Canal {room}</div>
+            <div id="record">
+              Gravação:
               {time.m !== undefined
                 ? `${time.m <= 9 ? "0" + time.m : time.m}`
                 : "00"}
@@ -205,9 +212,6 @@ export default function ClientComponent() {
                 ? `${time.s <= 9 ? "0" + time.s : time.s}`
                 : "00"}
             </div>
-            <div id="status">{getConectado()}</div>
-            <div id="users">{qtdCanal} usuário(s)</div>
-            <div id="channel">Canal {room}</div>
           </div>
           <div className="buttons-container">
             <ul>

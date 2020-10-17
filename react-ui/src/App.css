@@ -21,6 +21,25 @@ body {
   user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
 }
 
+audio {
+  background-color: #eee;
+  border-radius: 15px;
+  display: block;
+  border: solid 3px #8ac3d1;
+  padding: 10px;
+  height: 23px;
+  width: 300px;
+  margin: 3px auto;
+}
+
+audio.samePerson {
+  border: solid 3px #d4908a;
+}
+
+audio::before {
+  content: "ok";
+}
+
 #brand {
   display: block;
   padding: 1vw;
@@ -33,6 +52,8 @@ body {
 
 #wrapper {
   width: 100vw;
+  max-width: 414px;
+  margin: auto;
 }
 
 #device-case {
@@ -56,12 +77,13 @@ body {
   font-family: "Share Tech Mono", sans-serif;
   font-size: 18px;
   background-color: #acb5a8;
-  border: solid 20px #202020;
-  border-radius: 20px;
+  border: solid 17px #202020;
+  border-radius: 17px;
   width: 80vw;
-  padding: 3vw;
+  max-width: 290px;
+  padding: 15px;
+  max-zoom: 100%;
   margin: 2vw auto;
-  min-height: 11vh;
   -webkit-box-shadow: inset -10px -10px 10px -10px rgba(66, 25, 25, 0.8);
   -moz-box-shadow: inset -10px -10px 10px -10px rgba(66, 25, 25, 0.8);
   box-shadow: inset -10px -10px 10px -10px rgba(66, 25, 25, 0.8);
@@ -84,6 +106,12 @@ body {
   float: right;
 }
 
+#record {
+  display: block;
+  text-align: center;
+  padding: 15px 2px 2px 0px;
+}
+
 #channel {
   display: block;
   font-size: 180%;
@@ -91,7 +119,7 @@ body {
 
 .buttons-container {
   margin: auto;
-  width: 90vw;
+  max-width: 350px;
   border-radius: 20px;
   background: #151515;
   box-shadow: inset 0 0 2px 2px rgba(0, 0, 0, 0.5);
@@ -108,9 +136,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0.7vw;
+  margin: 5px 2px;
   height: 60px;
-  width: 50vw;
+  width: 100px;
   background: #202020;
   border-top: 1px solid #353535;
   box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.8);
@@ -155,6 +183,7 @@ div.buttons-container .active-text {
   margin: 20px auto 20px auto;
   padding: 14px;
   width: 80vw;
+  max-width: 320px;
   border: solid 1px #000;
   color: #c0c0c0;
   background: #202020;
