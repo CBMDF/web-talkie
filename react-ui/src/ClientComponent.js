@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import ReactAudioPlayer from "react-audio-player";
 import Recorder from "./Recorder";
 import useSound from "use-sound";
+import { v4 as uuidv4 } from "uuid";
 
 import rogerSound from "./assets/roger.mp3";
 
@@ -130,13 +131,29 @@ export default function ClientComponent() {
 
   //console.log('audioResposta', audioResposta);
 
+  const audioGain = (e) => {
+    var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    var audioElement = document.getElementById(e.target.id);
+    var gainNode = audioCtx.createGain();
+    var source = audioCtx.createMediaElementSource(audioElement);
+    source.connect(gainNode);
+    gainNode.gain.setValueAtTime(20, audioCtx.currentTime);
+    gainNode.connect(audioCtx.destination);
+  };
+
   const getUltimosCincoAudios = () => {
     if (recording) {
       return;
     }
+    var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const gainNode = new GainNode(audioCtx);
 
     if (chat.length > 0) {
       let arrayAudio = chat.map((audio, i) => {
+        gainNode.connect(audioCtx.destination);
+        gainNode.gain.setValueAtTime(20, audioCtx.currentTime);
+        console.log("Audio:", audio);
+
         if (i > 3) {
           // eslint-disable-next-line
           return;
@@ -158,16 +175,19 @@ export default function ClientComponent() {
           float = "right";
           border = "samePerson";
         }
+        const ref = React.createRef();
 
         return (
           <div style={{ float: float }} key={Math.random()}>
             <ReactAudioPlayer
+              onPlay={audioGain}
               onEnded={playRoger}
               key={audioURL}
               src={audioURL}
               autoPlay={autoPlay}
-              controls="false"
-              volume="1.0"
+              controls={true}
+              volume={1.0}
+              id={uuidv4()}
               className={border}
             />
           </div>
