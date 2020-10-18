@@ -131,10 +131,10 @@ export default function ClientComponent() {
   //console.log('audioResposta', audioResposta);
 
   const audioGain = (e) => {
-    var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    var audioElement = document.getElementById(e.target.id);
-    var gainNode = audioCtx.createGain();
-    var source = audioCtx.createMediaElementSource(audioElement);
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const audioElement = document.getElementById(e.target.id);
+    const gainNode = audioCtx.createGain();
+    const source = audioCtx.createMediaElementSource(audioElement);
     source.connect(gainNode);
     gainNode.gain.setValueAtTime(20, audioCtx.currentTime);
     gainNode.connect(audioCtx.destination);
@@ -146,13 +146,6 @@ export default function ClientComponent() {
     }
 
     if (chat.length > 0) {
-      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      const gainNode = new GainNode(audioCtx);
-      audioCtx.resume().then(() => {
-        gainNode.connect(audioCtx.destination);
-        gainNode.gain.setValueAtTime(20, audioCtx.currentTime);
-      });
-
       let arrayAudio = chat.map((audio, i) => {
         if (i > 3) {
           // eslint-disable-next-line

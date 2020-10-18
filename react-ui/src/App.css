@@ -11,7 +11,6 @@ a {
 }
 body {
   margin: 0px;
-  padding-top: 20px;
   overflow: hidden;
   background: #202020;
   font-family: sans-serif;
@@ -59,8 +58,7 @@ audio::before {
 
 #device-case {
   display: block;
-  padding: 2vw;
-
+  padding: 20px 10px 0px 10px;
   background: rgb(255, 229, 121);
   background: linear-gradient(
     180deg,
