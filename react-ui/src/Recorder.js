@@ -5,7 +5,7 @@ import { FaStop } from "react-icons/fa";
 import useSound from "use-sound";
 
 import startSound from "./assets/start.mp3";
-import endSound from "./assets/end.mp3";
+import endSound from "./assets/roger.mp3";
 
 import styles from "./styles.module.css";
 const audioType = "audio/*";
@@ -21,11 +21,8 @@ const Recorder = (props) => {
   const [medianotFound, setMedianotFound] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(false);
 
-  const [audioBlob, setAudioBlob] = useState(null);
-
   useEffect(() => {
     async function getMedia() {
-      console.log("getMedia");
       navigator.getUserMedia =
         navigator.getUserMedia ||
         navigator.webkitGetUserMedia ||
@@ -37,8 +34,6 @@ const Recorder = (props) => {
           audio: true,
         });
         let mediaRecorder = new MediaRecorder(stream);
-
-        console.log("mediaRecorder", mediaRecorder);
 
         mediaRecorder.ondataavailable = (e) => {
           if (e.data && e.data.size > 0) {
@@ -54,12 +49,6 @@ const Recorder = (props) => {
     }
     getMedia();
   }, []);
-
-  const handleAudioStart = (e) => {
-    e.preventDefault();
-    startTimer();
-    mediaRecorder.resume();
-  };
 
   const startTimer = () => {
     timer = setInterval(countDown, 1000);
@@ -91,9 +80,6 @@ const Recorder = (props) => {
 
   const startRecording = (e) => {
     playStart();
-    console.log("novo mediaRecorder", mediaRecorder);
-    e.preventDefault();
-    //  console.log(e);
     if (!props.recording) {
       // wipe old data chunks
       chunks = [];
@@ -107,13 +93,9 @@ const Recorder = (props) => {
 
   const stopRecording = (e) => {
     playEnd();
-    console.log("stopRecordi");
-
     clearInterval(timer);
     setTime({});
     seconds = 0;
-
-    e.preventDefault();
     // stop the recorder
     mediaRecorder.stop();
     // say that we're not recording
@@ -121,17 +103,6 @@ const Recorder = (props) => {
     //this.setState({ recording: false });
     // save the video to memory
     saveAudio();
-  };
-
-  const handleReset = () => {
-    this.setState({
-      time: {},
-      seconds: 0,
-      medianotFound: false,
-
-      audioBlob: null,
-    });
-    props.handleReset(this.state);
   };
 
   const saveAudio = () => {
@@ -142,13 +113,6 @@ const Recorder = (props) => {
     // append videoURL to list of saved videos for rendering
     // const audios = [audioURL];
     // this.setState({ audios, audioBlob: blob });
-
-    console.log({
-      url: audioURL,
-      blob: blob,
-      chunks: chunks,
-      duration: time,
-    });
 
     props.handleAudioUpload({
       url: audioURL,
@@ -165,31 +129,23 @@ const Recorder = (props) => {
 
     if (mobile) {
       return (
-        <a
+        <button
+          className="button-record"
           onTouchStart={(e) => startRecording(e)}
           onPointerUp={(e) => stopRecording(e)}
-          href=" #"
         >
-          {!props.recording ? (
-            <FaMicrophone className="button-record" />
-          ) : (
-            <FaStop className="button-record" />
-          )}
-        </a>
+          {!props.recording ? <FaMicrophone /> : <FaStop />}
+        </button>
       );
     } else {
       return (
-        <a
+        <button
+          className="button-record"
           onMouseDown={(e) => startRecording(e)}
           onMouseUp={(e) => stopRecording(e)}
-          href=" #"
         >
-          {!props.recording ? (
-            <FaMicrophone className="button-record" />
-          ) : (
-            <FaStop className="button-record" />
-          )}
-        </a>
+          {!props.recording ? <FaMicrophone /> : <FaStop />}
+        </button>
       );
     }
   };

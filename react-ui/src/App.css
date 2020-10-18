@@ -11,6 +11,7 @@ a {
 }
 body {
   margin: 0px;
+  padding-top: 20px;
   overflow: hidden;
   background: #202020;
   font-family: sans-serif;
@@ -26,8 +27,8 @@ audio {
   border-radius: 15px;
   display: block;
   border: solid 3px #337180;
-  padding: 10px;
-  height: 23px;
+  padding: 3px;
+  height: 30px;
   width: 300px;
   margin: 3px auto;
 }
@@ -66,7 +67,6 @@ audio::before {
     rgba(255, 229, 121, 1) 0%,
     rgba(217, 152, 14, 1) 100%
   );
-  border-radius: 0.3vw;
   -webkit-box-shadow: 10px 10px 13px -4px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: 10px 10px 13px -4px rgba(0, 0, 0, 0.75);
   box-shadow: 10px 10px 13px -4px rgba(0, 0, 0, 0.75);
@@ -182,8 +182,7 @@ div.buttons-container .active-text {
   display: block;
   margin: 20px auto 20px auto;
   padding: 14px;
-  width: 80vw;
-  max-width: 320px;
+  width: 350px;
   border: solid 1px #000;
   color: #c0c0c0;
   background: #202020;

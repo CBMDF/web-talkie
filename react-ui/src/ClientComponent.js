@@ -107,7 +107,6 @@ export default function ClientComponent() {
   };
 
   let handleAudioUpload = (file) => {
-    console.log(file);
     sendMessage(room, file);
 
     //  handleReset();
@@ -145,15 +144,16 @@ export default function ClientComponent() {
     if (recording) {
       return;
     }
-    var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const gainNode = new GainNode(audioCtx);
 
     if (chat.length > 0) {
-      let arrayAudio = chat.map((audio, i) => {
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const gainNode = new GainNode(audioCtx);
+      audioCtx.resume().then(() => {
         gainNode.connect(audioCtx.destination);
         gainNode.gain.setValueAtTime(20, audioCtx.currentTime);
-        console.log("Audio:", audio);
+      });
 
+      let arrayAudio = chat.map((audio, i) => {
         if (i > 3) {
           // eslint-disable-next-line
           return;
@@ -175,7 +175,6 @@ export default function ClientComponent() {
           float = "right";
           border = "samePerson";
         }
-        const ref = React.createRef();
 
         return (
           <div style={{ float: float }} key={Math.random()}>
@@ -194,7 +193,6 @@ export default function ClientComponent() {
         );
       });
 
-      console.log(arrayAudio);
       return arrayAudio;
     }
   };
