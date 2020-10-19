@@ -130,6 +130,7 @@ const Recorder = (props) => {
     if (mobile) {
       return (
         <button
+          aria-label="Inicia/Termina Gravação"
           className="button-record"
           onTouchStart={(e) => startRecording(e)}
           onPointerUp={(e) => stopRecording(e)}
@@ -140,6 +141,7 @@ const Recorder = (props) => {
     } else {
       return (
         <button
+          aria-label="Inicia/Termina Gravação"
           className="button-record"
           onMouseDown={(e) => startRecording(e)}
           onMouseUp={(e) => stopRecording(e)}
