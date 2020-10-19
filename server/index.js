@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const cluster = require("cluster");
 const numCPUs = require("os").cpus().length;
+var compression = require("compression");
 
 const socketIo = require("socket.io");
 const isDev = process.env.NODE_ENV !== "production";
@@ -23,7 +24,7 @@ const PORT = process.env.PORT || 5000;
 // } else {
 const app = express();
 const server = require("http").createServer(app);
-
+app.use(compression());
 const io = socketIo(server);
 
 app.use(function (req, res, next) {
