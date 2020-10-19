@@ -3,6 +3,7 @@
   "name": "Web-Walkie",
   "lang": "pt",
   "description": "A simple Push-to-Talk web application.",
+  "start_url": "/",
   "background_color": "#fee376",
   "theme_color": "#fee376",
   "dir": "ltr",
