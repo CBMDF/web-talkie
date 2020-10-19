@@ -1,6 +1,6 @@
 {
-  "short_name": "Web-Walkie",
-  "name": "Web-Walkie",
+  "short_name": "Web-Talkie",
+  "name": "Web-Talkie",
   "lang": "pt",
   "description": "A simple Push-to-Talk web application.",
   "start_url": "/",
