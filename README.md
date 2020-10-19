@@ -1,4 +1,7 @@
 # Web-Talkie
+[![GitHub issues](https://img.shields.io/github/issues/CBMDF/web-talkie)](https://github.com/CBMDF/web-talkie/issues) <a href="https://github.com/CBMDF/web-talkie/deployments"><img src="https://img.shields.io/github/deployments/CBMDF/web-talkie/webtalkiecbmdf"></a> ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/CBMDF/web-talkie?include_prereleases) ![GitHub milestones](https://img.shields.io/github/milestones/open/CBMDF/web-talkie) <a href="https://github.com/CBMDF/web-talkie/blob/main/LICENSE"><img src="https://img.shields.io/github/license/CBMDF/web-talkie"></a> <img src="https://img.shields.io/github/repo-size/CBMDF/web-talkie">
+
+
 A simple Push-to-Talk web application. Developed as a contour solution and proof of concept for voice communications in firefighter activities.
 
 <img src="https://github.com/CBMDF/web-talkie/blob/main/screenshot.png" width=300 />
