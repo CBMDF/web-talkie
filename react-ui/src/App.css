@@ -47,7 +47,7 @@ audio::before {
   color: #400e00;
   font-size: 3vh;
   text-align: right;
-  background: no-repeat url("./web-walkie-cbmdf.svg") right;
+  background: no-repeat url("./web-talkie-cbmdf.svg") right;
 }
 
 #wrapper {
