@@ -6,14 +6,17 @@ import useSound from "use-sound";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-
+import Alert from "@material-ui/lab/Alert";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import rogerSound from "./assets/roger.mp3";
 import TextField from "@material-ui/core/TextField";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import Button from "@material-ui/core/Button";
-
+import IconButton from "@material-ui/core/IconButton";
+import Collapse from "@material-ui/core/Collapse";
+import CloseIcon from "@material-ui/icons/Close";
+import { makeStyles } from "@material-ui/core/styles";
 import {
   initiateSocket,
   disconnectSocket,
@@ -26,7 +29,17 @@ import {
 } from "./Socket";
 
 let chats = [];
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: "100%",
+    "& > * + *": {
+      marginTop: theme.spacing(2),
+    },
+  },
+}));
 export default function ClientComponent() {
+  const classes = useStyles();
   const [playRoger] = useSound(rogerSound, { volume: 1 });
   const rooms = [1, 2, 3];
   const [room, setRoom] = useState(rooms[0]);
@@ -35,6 +48,7 @@ export default function ClientComponent() {
   const [qtdCanal, setQtdCanal] = useState(0);
   const [time, setTime] = useState({});
   const [online, setOnline] = useState(window.navigator.onLine);
+  const [alertMaxSize, setAlertMaxSize] = useState(false);
   const [open, setOpen] = React.useState(
     localStorage.getItem("apelido") ? true : false
   );
@@ -291,6 +305,25 @@ export default function ClientComponent() {
       </Dialog>
       <div id="wrapper" onContextMenu={(e) => e.preventDefault()}>
         <div id="device-case">
+          <Collapse in={alertMaxSize}>
+            <Alert
+              severity="error"
+              action={
+                <IconButton
+                  aria-label="close"
+                  color="inherit"
+                  size="small"
+                  onClick={() => {
+                    setAlertMaxSize(false);
+                  }}
+                >
+                  <CloseIcon fontSize="inherit" />
+                </IconButton>
+              }
+            >
+              A gravação não pode ultrapassar de 30 segundos.
+            </Alert>
+          </Collapse>
           <div id="brand">
             {" "}
             <TuneIcon
@@ -362,6 +395,7 @@ export default function ClientComponent() {
               setRecording={setRecording}
               time={time}
               setTime={setTime}
+              setAlertMaxSize={setAlertMaxSize}
             />
           </div>
           <div id="audio-history">{getUltimosCincoAudios()}</div>

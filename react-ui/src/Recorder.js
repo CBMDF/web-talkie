@@ -96,7 +96,6 @@ const Recorder = (props) => {
   const stopRecording = (e) => {
     clearInterval(timer);
     setTime({});
-    console.log(mediaRecorder);
 
     if (mediaRecorder.state === "recording") {
       // stop the recorder
@@ -108,10 +107,13 @@ const Recorder = (props) => {
     //this.setState({ recording: false });
     // save the video to memory
 
-    if (seconds > 0) {
+    if (seconds > 0 && seconds < 31) {
       saveAudio();
 
       playEnd();
+    }
+    if (seconds > 30) {
+      props.setAlertMaxSize(true);
     }
     seconds = 0;
   };
@@ -195,6 +197,7 @@ Recorder.propTypes = {
   handleReset: PropTypes.func,
   audioURL: PropTypes.string,
   showUIAudio: PropTypes.bool,
+  setAlertMaxSize: PropTypes.func,
 };
 
 export default Recorder;
