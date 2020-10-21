@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from "react";
+import TuneIcon from "@material-ui/icons/Tune";
 import ReactAudioPlayer from "react-audio-player";
 import Recorder from "./Recorder";
 import useSound from "use-sound";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
 
+import DialogTitle from "@material-ui/core/DialogTitle";
 import rogerSound from "./assets/roger.mp3";
-
+import TextField from "@material-ui/core/TextField";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+import Button from "@material-ui/core/Button";
 
 import {
   initiateSocket,
@@ -29,9 +35,29 @@ export default function ClientComponent() {
   const [qtdCanal, setQtdCanal] = useState(0);
   const [time, setTime] = useState({});
   const [online, setOnline] = useState(window.navigator.onLine);
-
+  const [open, setOpen] = React.useState(
+    localStorage.getItem("apelido") ? true : false
+  );
   const [recording, setRecording] = useState(false);
+  const [apelido, setApelido] = useState(
+    localStorage.getItem("apelido") === null
+      ? localStorage.getItem("apelido")
+      : ""
+  );
 
+  console.log(localStorage.getItem("apelido"));
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleCancel = () => {
+    setOpen(false);
+    localStorage.setItem("apelido", null);
+  };
+  const handleClose = () => {
+    setOpen(false);
+    localStorage.setItem("apelido", apelido);
+  };
   const [audioDetails, setAudioDetails] = useState({
     url: null,
     blob: null,
@@ -63,10 +89,12 @@ export default function ClientComponent() {
       }
     }
     subscribeToChat((err, data) => {
+      console.log(data);
       if (err) {
         console.log(err);
         return;
       }
+      data.message.apelido = data.apelido;
 
       if (person !== data.person) {
         data.message.played = false;
@@ -116,7 +144,7 @@ export default function ClientComponent() {
   };
 
   let handleAudioUpload = (file) => {
-    sendMessage(room, file);
+    sendMessage(room, file, apelido);
 
     //  handleReset();
 
@@ -188,14 +216,17 @@ export default function ClientComponent() {
 
         let float = "left";
         let border = "";
-
+        let apresentacaoApelido;
         if (chat[i].samePerson) {
           float = "right";
           border = "samePerson";
+        } else {
+          apresentacaoApelido = audio.apelido ? audio.apelido : "Sem apelido";
         }
 
         return (
           <div style={{ float: float }} key={Math.random()}>
+            {apresentacaoApelido}
             <ReactAudioPlayer
               onPlay={audioGain}
               onEnded={onEnded}
@@ -231,9 +262,42 @@ export default function ClientComponent() {
 
   return (
     <React.Fragment>
+      <Dialog
+        open={open}
+        onClose={handleCancel}
+        aria-labelledby="form-dialog-title"
+      >
+        <DialogTitle id="form-dialog-title">Configurações</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="meuApelido"
+            label="Informe o apelido"
+            type="text"
+            fullWidth
+            value={apelido}
+            onChange={(e) => setApelido(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancel} color="primary">
+            Cancelar
+          </Button>
+          <Button onClick={handleClose} color="primary">
+            Salvar
+          </Button>
+        </DialogActions>
+      </Dialog>
       <div id="wrapper" onContextMenu={(e) => e.preventDefault()}>
         <div id="device-case">
-          <div id="brand"></div>
+          <div id="brand">
+            {" "}
+            <TuneIcon
+              style={{ fontSize: 40, float: "left" }}
+              onClick={handleClickOpen}
+            />
+          </div>
           <div id="lcd-display" className={online ? "" : "offline"}>
             <div id="status">{getConectado()}</div>
             <div id="users">{qtdCanal} usuário(s)</div>

@@ -50,9 +50,9 @@ io.on("connection", (socket) => {
   });
 
   socket.on("chat", (data) => {
-    const { message, room, person } = data;
+    const { message, room, person, apelido } = data;
     // console.log(`msg: ${message}, room: ${room}`);
-    io.to(room).emit("chat", { message, person });
+    io.to(room).emit("chat", { message, person, apelido });
   });
 
   for (let i = 1; i < 100; i++) {

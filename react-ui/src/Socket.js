@@ -42,8 +42,8 @@ export const subscribeToReconnect = (cb, room) => {
   });
 };
 
-export const sendMessage = (room, message) => {
-  if (socket) socket.emit("chat", { message, room, person });
+export const sendMessage = (room, message, apelido) => {
+  if (socket) socket.emit("chat", { message, room, person, apelido });
 };
 
 export const subscribeToQtd = (cb) => {
