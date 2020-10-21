@@ -92,17 +92,22 @@ const Recorder = (props) => {
   };
 
   const stopRecording = (e) => {
-    playEnd();
     clearInterval(timer);
     setTime({});
-    seconds = 0;
+
     // stop the recorder
     mediaRecorder.stop();
     // say that we're not recording
     props.setRecording(false);
     //this.setState({ recording: false });
     // save the video to memory
-    saveAudio();
+
+    if (seconds > 0) {
+      saveAudio();
+
+      playEnd();
+    }
+    seconds = 0;
   };
 
   const saveAudio = () => {
@@ -129,13 +134,18 @@ const Recorder = (props) => {
 
     if (mobile) {
       return (
-        <button
-          aria-label="Inicia/Termina Gravação"
-          className="button-record"
-          onTouchStart={(e) => startRecording(e)}
-          onPointerUp={(e) => stopRecording(e)}
-        >
-          {!props.recording ? <FaMicrophone /> : <FaStop />}
+        <button aria-label="Inicia/Termina Gravação" className="button-record">
+          {!props.recording ? (
+            <FaMicrophone
+              onTouchStart={(e) => startRecording(e)}
+              onPointerUp={(e) => stopRecording(e)}
+            />
+          ) : (
+            <FaStop
+              onTouchStart={(e) => startRecording(e)}
+              onPointerUp={(e) => stopRecording(e)}
+            />
+          )}
         </button>
       );
     } else {
@@ -146,7 +156,17 @@ const Recorder = (props) => {
           onMouseDown={(e) => startRecording(e)}
           onMouseUp={(e) => stopRecording(e)}
         >
-          {!props.recording ? <FaMicrophone /> : <FaStop />}
+          {!props.recording ? (
+            <FaMicrophone
+              onTouchStart={(e) => startRecording(e)}
+              onPointerUp={(e) => stopRecording(e)}
+            />
+          ) : (
+            <FaStop
+              onTouchStart={(e) => startRecording(e)}
+              onPointerUp={(e) => stopRecording(e)}
+            />
+          )}
         </button>
       );
     }
