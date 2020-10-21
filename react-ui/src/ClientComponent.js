@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import ReactAudioPlayer from "react-audio-player";
 import Recorder from "./Recorder";
 import useSound from "use-sound";
-import { v4 as uuidv4 } from "uuid";
 
 import rogerSound from "./assets/roger.mp3";
 
@@ -20,6 +19,7 @@ import {
   person,
 } from "./Socket";
 
+let chats = [];
 export default function ClientComponent() {
   const [playRoger] = useSound(rogerSound, { volume: 1 });
   const rooms = [1, 2, 3];
@@ -51,7 +51,17 @@ export default function ClientComponent() {
     }
     window.addEventListener("offline", handleNetworkChange);
     window.addEventListener("online", handleNetworkChange);
-
+    function pollDOM(message) {
+      if (!isPlaying()) {
+        // Do something with el]
+        setChat((oldChats) => [message, ...oldChats]);
+        chats.unshift(message);
+      } else {
+        setTimeout(() => {
+          pollDOM(message);
+        }, 500); // try again in 300 milliseconds
+      }
+    }
     subscribeToChat((err, data) => {
       if (err) {
         console.log(err);
@@ -64,8 +74,7 @@ export default function ClientComponent() {
         data.message.played = true;
         data.message.samePerson = true;
       }
-
-      setChat((oldChats) => [data.message, ...oldChats]);
+      pollDOM(data.message);
     });
 
     subscribeToQtd((err, data) => {
@@ -136,15 +145,32 @@ export default function ClientComponent() {
     const gainNode = audioCtx.createGain();
     const source = audioCtx.createMediaElementSource(audioElement);
     source.connect(gainNode);
-    gainNode.gain.setValueAtTime(20, audioCtx.currentTime);
+    gainNode.gain.setValueAtTime(2, audioCtx.currentTime);
     gainNode.connect(audioCtx.destination);
+  };
+
+  const isPlaying = () => {
+    let isPlaying = false;
+    /* eslint-disable-next-line */
+    chats.map((audio) => {
+      if (audio.played === false) {
+        isPlaying = true;
+      }
+    });
+
+    return isPlaying;
+  };
+
+  const onEnded = (e) => {
+    playRoger();
+
+    chats[e.srcElement.id].played = true;
   };
 
   const getUltimosCincoAudios = () => {
     if (recording) {
       return;
     }
-
     if (chat.length > 0) {
       let arrayAudio = chat.map((audio, i) => {
         if (i > 3) {
@@ -154,7 +180,6 @@ export default function ClientComponent() {
         let autoPlay = false;
         if (!audio.played) {
           autoPlay = true;
-          chat[i].played = true;
         }
 
         const blob = new Blob(audio.chunks, { type: "audio/*" });
@@ -173,13 +198,13 @@ export default function ClientComponent() {
           <div style={{ float: float }} key={Math.random()}>
             <ReactAudioPlayer
               onPlay={audioGain}
-              onEnded={playRoger}
+              onEnded={onEnded}
               key={audioURL}
               src={audioURL}
               autoPlay={autoPlay}
               controls={true}
               volume={1.0}
-              id={uuidv4()}
+              id={i.toString()}
               className={border}
             />
           </div>
