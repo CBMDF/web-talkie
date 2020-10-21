@@ -80,23 +80,29 @@ const Recorder = (props) => {
 
   const startRecording = (e) => {
     playStart();
-    if (!props.recording) {
-      // wipe old data chunks
-      chunks = [];
-      // start recorder with 10ms buffer
-      mediaRecorder.start(10);
-      startTimer();
-      // say that we're recording
-      props.setRecording(true);
-    }
+    setTimeout(() => {
+      if (!props.recording) {
+        // wipe old data chunks
+        chunks = [];
+        // start recorder with 10ms buffer
+        mediaRecorder.start(10);
+        startTimer();
+        // say that we're recording
+        props.setRecording(true);
+      }
+    }, 700);
   };
 
   const stopRecording = (e) => {
     clearInterval(timer);
     setTime({});
+    console.log(mediaRecorder);
 
-    // stop the recorder
-    mediaRecorder.stop();
+    if (mediaRecorder.state === "recording") {
+      // stop the recorder
+      mediaRecorder.stop();
+    }
+
     // say that we're not recording
     props.setRecording(false);
     //this.setState({ recording: false });
