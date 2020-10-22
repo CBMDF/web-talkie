@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import TuneIcon from "@material-ui/icons/Tune";
 import ReactAudioPlayer from "react-audio-player";
 import Recorder from "./Recorder";
@@ -27,8 +27,7 @@ import {
   subscribeToReconnect,
   person,
 } from "./Socket";
-
-let chats = [];
+import { FaIgloo } from "react-icons/fa";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 export default function ClientComponent() {
   const classes = useStyles();
+  const audios = useRef(null);
   const [playRoger] = useSound(rogerSound, { volume: 1 });
   const rooms = [1, 2, 3];
   const [room, setRoom] = useState(rooms[0]);
@@ -59,7 +59,6 @@ export default function ClientComponent() {
       : ""
   );
 
-  console.log(localStorage.getItem("apelido"));
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -95,7 +94,6 @@ export default function ClientComponent() {
       if (!isPlaying()) {
         // Do something with el]
         setChat((oldChats) => [message, ...oldChats]);
-        chats.unshift(message);
       } else {
         setTimeout(() => {
           pollDOM(message);
@@ -103,7 +101,7 @@ export default function ClientComponent() {
       }
     }
     subscribeToChat((err, data) => {
-      console.log(data);
+      //console.log(data);
       if (err) {
         console.log(err);
         return;
@@ -116,6 +114,7 @@ export default function ClientComponent() {
         data.message.played = true;
         data.message.samePerson = true;
       }
+
       pollDOM(data.message);
     });
 
@@ -192,25 +191,21 @@ export default function ClientComponent() {
   };
 
   const isPlaying = () => {
-    //    let isPlaying = false;
-    if (!chats[1].played) return true;
+    let lastAudio = document.getElementById("0");
+
+    if (!lastAudio) {
+      return false;
+    }
+
+    if (lastAudio.duration > 0 && !lastAudio.paused) {
+      return true;
+    }
 
     return false;
-
-    // /* eslint-disable-next-line */
-    // chats.map((audio) => {
-    //   if (audio.played === false) {
-    //     isPlaying = true;
-    //   }
-    // });
-
-    //return isPlaying;
   };
 
   const onEnded = (e) => {
     playRoger();
-
-    chats[e.srcElement.id].played = true;
   };
 
   const getUltimosCincoAudios = () => {
@@ -226,6 +221,7 @@ export default function ClientComponent() {
         let autoPlay = false;
         if (!audio.played) {
           autoPlay = true;
+          chat[i].played = true;
         }
 
         const blob = new Blob(audio.chunks, { type: "audio/*" });
@@ -246,8 +242,11 @@ export default function ClientComponent() {
 
         return (
           <div style={{ float: float }} key={Math.random()}>
-            <div className={nickNameClass}>{apresentacaoApelido}</div>
+            <div className={nickNameClass} id="myDIV">
+              {apresentacaoApelido}{" "}
+            </div>
             <ReactAudioPlayer
+              name={i.toString()}
               onPlay={audioGain}
               onEnded={onEnded}
               key={audioURL}
@@ -404,7 +403,9 @@ export default function ClientComponent() {
               setAlertMaxSize={setAlertMaxSize}
             />
           </div>
-          <div id="audio-history">{getUltimosCincoAudios()}</div>
+          <div id="audio-history" ref={audios}>
+            {getUltimosCincoAudios()}
+          </div>
         </div>
       </div>
     </React.Fragment>
