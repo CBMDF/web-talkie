@@ -406,6 +406,7 @@ export default function ClientComponent() {
           <div id="audio-history" ref={audios}>
             {getUltimosCincoAudios()}
           </div>
+          <div id="version">v 0.1</div>
         </div>
       </div>
     </React.Fragment>
