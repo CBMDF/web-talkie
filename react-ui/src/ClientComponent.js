@@ -229,18 +229,20 @@ export default function ClientComponent() {
         const audioURL = window.URL.createObjectURL(blob);
 
         let float = "left";
-        let border = "";
+        let audioBorderClass = "";
+        let nickNameClass = "";
         let apresentacaoApelido;
         if (chat[i].samePerson) {
           float = "right";
-          border = "samePerson";
+          audioBorderClass = "samePerson";
         } else {
           apresentacaoApelido = audio.apelido ? audio.apelido : "Sem apelido";
+          nickNameClass = "nickName";
         }
 
         return (
           <div style={{ float: float }} key={Math.random()}>
-            {apresentacaoApelido}
+            <div className={nickNameClass}>{apresentacaoApelido}</div>
             <ReactAudioPlayer
               onPlay={audioGain}
               onEnded={onEnded}
@@ -250,7 +252,7 @@ export default function ClientComponent() {
               controls={true}
               volume={1.0}
               id={i.toString()}
-              className={border}
+              className={audioBorderClass}
             />
           </div>
         );
