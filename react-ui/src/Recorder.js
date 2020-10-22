@@ -164,17 +164,7 @@ const Recorder = (props) => {
           onMouseDown={(e) => startRecording(e)}
           onMouseUp={(e) => stopRecording(e)}
         >
-          {!props.recording ? (
-            <FaMicrophone
-              onTouchStart={(e) => startRecording(e)}
-              onPointerUp={(e) => stopRecording(e)}
-            />
-          ) : (
-            <FaStop
-              onTouchStart={(e) => startRecording(e)}
-              onPointerUp={(e) => stopRecording(e)}
-            />
-          )}
+          {!props.recording ? <FaMicrophone /> : <FaStop />}
         </button>
       );
     }
