@@ -25,15 +25,15 @@ audio {
   background-color: #eee;
   border-radius: 15px;
   display: block;
-  border: solid 3px #337180;
+  border: solid 4px #337180;
   padding: 3px;
   height: 30px;
   width: 300px;
-  margin: 3px auto;
+  margin: 3px 20px;
 }
 
 audio.samePerson {
-  border: solid 3px #d40000;
+  border: solid 4px #d40000;
 }
 
 audio::before {
@@ -46,11 +46,12 @@ audio::before {
   display: block;
   width: fit-content;
   padding: 2px 10px;
-  margin-bottom: -6px;
-  margin-left: 15px;
-  font-size: smaller;
-  background: #202020;
+  margin-bottom: -7px;
+  margin-left: 25px;
+  font-size: 10px;
+  background: #337180;
   color: #eee;
+  text-transform: uppercase;
 }
 
 #brand {
