@@ -50,7 +50,7 @@ export default function ClientComponent() {
   const [online, setOnline] = useState(window.navigator.onLine);
   const [alertMaxSize, setAlertMaxSize] = useState(false);
   const [open, setOpen] = React.useState(
-    localStorage.getItem("apelido") ? true : false
+    localStorage.getItem("apelido") === null ? true : false
   );
   const [recording, setRecording] = useState(false);
   const [apelido, setApelido] = useState(
@@ -192,15 +192,19 @@ export default function ClientComponent() {
   };
 
   const isPlaying = () => {
-    let isPlaying = false;
-    /* eslint-disable-next-line */
-    chats.map((audio) => {
-      if (audio.played === false) {
-        isPlaying = true;
-      }
-    });
+    //    let isPlaying = false;
+    if (!chats[1].played) return true;
 
-    return isPlaying;
+    return false;
+
+    // /* eslint-disable-next-line */
+    // chats.map((audio) => {
+    //   if (audio.played === false) {
+    //     isPlaying = true;
+    //   }
+    // });
+
+    //return isPlaying;
   };
 
   const onEnded = (e) => {
