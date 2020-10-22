@@ -191,21 +191,17 @@ export default function ClientComponent() {
   };
 
   const isPlaying = () => {
-    let lastAudio = document.getElementById("0");
+    for (let i = 0; i < 4; i++) {
+      let lastAudio = document.getElementById(i);
 
-    if (!lastAudio) {
-      return false;
-    }
-
-    if (lastAudio.duration > 0 && !lastAudio.paused) {
-      return true;
+      if (lastAudio) {
+        if (lastAudio.duration > 0 && !lastAudio.paused) {
+          return true;
+        }
+      }
     }
 
     return false;
-  };
-
-  const onEnded = (e) => {
-    playRoger();
   };
 
   const getUltimosCincoAudios = () => {
@@ -248,7 +244,6 @@ export default function ClientComponent() {
             <ReactAudioPlayer
               name={i.toString()}
               onPlay={audioGain}
-              onEnded={onEnded}
               key={audioURL}
               src={audioURL}
               autoPlay={autoPlay}
@@ -406,7 +401,7 @@ export default function ClientComponent() {
           <div id="audio-history" ref={audios}>
             {getUltimosCincoAudios()}
           </div>
-          <div id="version">v 0.1</div>
+          <div id="version">v 0.2</div>
         </div>
       </div>
     </React.Fragment>

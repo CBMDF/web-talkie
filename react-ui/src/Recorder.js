@@ -107,9 +107,8 @@ const Recorder = (props) => {
     // save the video to memory
 
     if (seconds > 0 && seconds < 31) {
-      saveAudio();
-
       playEnd();
+      saveAudio();
     }
     if (seconds > 30) {
       props.setAlertMaxSize(true);
